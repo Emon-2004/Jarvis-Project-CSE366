@@ -3,11 +3,15 @@ import webbrowser
 import pyttsx3
 
 recognizer = sr.Recognizer()
-engine = pyttsx3.init()
 
 def speak(text):
+    engine = pyttsx3.init()
     engine.say(text)
     engine.runAndWait()
+    engine.stop()
+
+# def processCommand(c):
+#     pass
 
 if __name__ == "__main__":
     speak("Initializing Jarvis...")
@@ -17,18 +21,24 @@ if __name__ == "__main__":
         # obtain audio from the microphone
         r = sr.Recognizer()
         
-
         
         print("Recognizing...")
         # recognize speech using Google Speech Recognition
         try:
             with  sr.Microphone() as source:
                 print("Listening...")
-                audio = r.listen(source,timeout=2,phrase_time_limit = 2)
-                        
-            command = r.recognize_google(audio)
-            print(command)
-        except sr.UnknownValueError:
-            print("Google Speech Recognition could not understand audio")
-        except sr.RequestError as e:  #Just In case google speech api or internet is down
-            print("Could not request results from Google Speech Recognition service; {0}".format(e))
+                audio = r.listen(source,timeout=2,phrase_time_limit = 3)      
+            word = r.recognize_google(audio)
+            print(f"Heard: {word}")
+            if("jarvis" in word.lower()):
+                speak("Ya")
+                # Listen for command
+                with  sr.Microphone() as source:
+                    print("Jarvis Active...")
+                    audio = r.listen(source)      
+                    command = r.recognize_google(audio)
+
+                    # processCommand()
+
+        except Exception as e:  #Just In case google speech api or internet is down
+            print("Google Speech Recognition could not understand audio; {0}".format(e))
