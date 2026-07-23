@@ -30,6 +30,10 @@ def processCommand(c):
     elif "open facebook" in c.lower():
         speak("Opening Facebook")
         webbrowser.open("https://www.facebook.com")
+    elif c.lower().startswith("play"):
+        song = c.lower().split(" ")[1]
+        link = musicLibrary.music[song]
+        webbrowser.open(link)
 
 
 if __name__ == "__main__":
